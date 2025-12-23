@@ -1,0 +1,143 @@
+:root {
+    --primary-color: #007bff;
+    --secondary-color: #6c757d;
+    --success-color: #28a745;
+    --error-color: #dc3545;
+    --bg-color: #f4f7f6;
+    --card-bg: #ffffff;
+}
+
+body {
+    font-family: "Microsoft JhengHei", Arial, sans-serif;
+    background-color: var(--bg-color);
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    min-height: 100vh;
+}
+
+.page {
+    display: none; /* 預設隱藏所有頁面 */
+    width: 100%;
+    max-width: 600px;
+    padding: 20px;
+    background: var(--card-bg);
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    min-height: 100vh;
+}
+
+.page.active {
+    display: block; /* 顯示當前頁面 */
+}
+
+/* 首頁 & 通用 */
+.hero-container {
+    text-align: center;
+    margin-top: 40%;
+}
+
+h1, h2 { text-align: center; color: #333; }
+
+button {
+    cursor: pointer;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-size: 16px;
+    transition: 0.3s;
+}
+
+.btn-primary { background-color: var(--primary-color); color: white; width: 100%; margin-top: 20px; }
+.btn-primary:hover { background-color: #0056b3; }
+
+.btn-secondary { background-color: var(--secondary-color); color: white; }
+.btn-danger { background-color: var(--error-color); color: white; }
+
+/* 章節頁 */
+.chapter-grid {
+    display: grid;
+    gap: 15px;
+    margin-top: 30px;
+}
+.btn-chapter {
+    background-color: white;
+    border: 2px solid var(--primary-color);
+    color: var(--primary-color);
+    padding: 20px;
+    font-size: 18px;
+    font-weight: bold;
+}
+.btn-chapter:hover {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+/* 刷題頁 */
+.quiz-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #ddd;
+}
+.score-board { font-weight: bold; color: var(--primary-color); }
+
+.question-nav {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 5px;
+    background: #eee;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+}
+.nav-btn {
+    padding: 5px;
+    background: white;
+    border: 1px solid #ccc;
+    font-size: 12px;
+}
+.nav-btn.answered { background: #d1ecf1; }
+.nav-btn.current { border: 2px solid var(--primary-color); font-weight: bold; }
+.hidden { display: none; }
+
+.question-container { margin-top: 20px; }
+.options-list { display: flex; flex-direction: column; gap: 10px; margin-top: 20px; }
+
+.option-btn {
+    text-align: left;
+    background: white;
+    border: 1px solid #ccc;
+    padding: 15px;
+}
+.option-btn:hover { background: #f8f9fa; }
+
+/* 作答反饋樣式 */
+.option-btn.correct { background-color: #d4edda; border-color: var(--success-color); color: #155724; }
+.option-btn.wrong { background-color: #f8d7da; border-color: var(--error-color); color: #721c24; }
+
+.explanation {
+    margin-top: 20px;
+    padding: 15px;
+    background-color: #e2e3e5;
+    border-radius: 8px;
+    border-left: 5px solid var(--primary-color);
+}
+
+.quiz-footer {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 30px;
+}
+
+/* 結果頁 */
+.result-card { text-align: center; margin-top: 20px; }
+.final-score { font-size: 48px; font-weight: bold; color: var(--primary-color); margin: 20px 0; }
+.analysis-box {
+    background: #fff3cd;
+    padding: 15px;
+    margin: 20px 0;
+    border-radius: 8px;
+    text-align: left;
+}
