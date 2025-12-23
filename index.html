@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>禹丞愛刷題</title>
+    <title>護理愛刷題</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -16,7 +16,9 @@
         </div>
     </div>
 
-    <div id="page-chapters" class="page">
+<div id="page-chapters" class="page">
+        <button class="btn-back" onclick="goToHome()">⬅ 回首頁</button>
+        
         <h2>內外科護理學－章節選擇</h2>
         <div class="chapter-grid">
             <button class="btn-chapter" onclick="startQuiz('digestive')">消化系統護理</button>
@@ -26,14 +28,15 @@
         </div>
     </div>
 
-    <div id="page-quiz" class="page">
+<div id="page-quiz" class="page">
         <div class="quiz-header">
-            <div class="score-board">目前得分: <span id="current-score">0</span> 分</div>
+            <button class="btn-text" onclick="goToChapters()">⬅ 退出</button>
+            
+            <div class="score-board">得分: <span id="current-score">0</span></div>
             <button class="btn-small" onclick="toggleNav()">題目導覽 ▼</button>
         </div>
         
-        <div id="question-nav" class="question-nav hidden">
-            </div>
+        <div id="question-nav" class="question-nav hidden"></div>
 
         <div class="question-container">
             <div class="question-info">
@@ -41,8 +44,7 @@
             </div>
             <h3 id="q-content">題目載入中...</h3>
             
-            <div class="options-list" id="options-container">
-                </div>
+            <div class="options-list" id="options-container"></div>
 
             <div id="explanation-area" class="explanation hidden">
                 <h4>詳細解析</h4>
@@ -77,5 +79,4 @@
 
     <script src="script.js"></script>
 </body>
-
 </html>
