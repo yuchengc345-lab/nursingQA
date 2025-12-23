@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>內外科護理學 - 消化系統刷題庫</title>
+    <style>
+        :root {
+            --primary-color: #2c7be5;
+            --success-color: #00d97e;
+            --error-color: #e63757;
+            --bg-color: #f4f6f8;
+            --nav-bg: #e9ecef;
+        }
+
+        body {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            background: white;
+            width: 100%;
+            max-width: 800px; /* 加寬一點以容納導航 */
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+        }
+
+        /* 新增：題目導航區樣式 */
+        .nav-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(40px, 1fr));
+            gap: 8px;
+            margin-bottom: 25px;
+            padding: 15px;
+            background-color: var(--nav-bg);
+            border-radius: 10px;
+        }
+
+        .nav-btn {
+            width: 100%;
+            height: 40px;
+            border: none;
+            background: white;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            color: #555;
+            transition: all 0.2s;
+        }
+
+        .nav-btn:hover {
+            background-color: #dbeafe;
+            color: var(--primary-color);
+        }
+
+        .nav-btn.active {
+            background-color: var(--primary-color);
+            color: white;
+            box-shadow: 0 2px 5px rgba(44, 123, 229, 0.4);
+        }
+
+        .question-box {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #222;
+            margin-bottom: 20px;
+            line-height: 1.5;
+            border-left: 5px solid var(--primary-color);
+            padding-left: 15px;
+        }
+
+        .options-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .option-btn {
+            background: #fff;
+            border: 2px solid #e0e0e0;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: left;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .option-btn:hover {
+            border-color: var(--primary-color);
+            background-color: #f0f7ff;
+        }
+
+        .option-btn.correct {
+            background-color: #d1fae5;
+            border-color: var(--success-color);
+            color: #065f46;
+        }
+
+        .option-btn.wrong {
+            background-color: #ffe4e6;
+            border-color: var(--error-color);
+            color: #991b1b;
+        }
+
+        .explanation-box {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #fff3cd;
+            border-left: 5px solid #ffc107;
+            border-radius: 4px;
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+
+        .explanation-title {
+            font-weight: bold;
+            color: #856404;
+            margin-bottom: 5px;
+        }
+
+        .control-panel {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        .next-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            width: 100%;
+            display: none;
+        }
+
+        .next-btn:hover {
+            background-color: #1a5cbe;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>💊 內外科 - 消化系統 (20題)</h1>
+        <p style="color: #666; font-size: 0.9rem;">點擊下方數字可直接跳轉題目</p>
+    </header>
+
+    <div class="nav-grid" id="nav-container">
+        </div>
+
+    <div class="question-box" id="question-text">
+        題目載入中...
+    </div>
+
+    <div class="options-grid" id="options-container"></div>
+
+    <div class="explanation-box" id="explanation">
+        <div class="explanation-title">💡 解析：</div>
+        <span id="explanation-text"></span>
+    </div>
+
+    <div class="control-panel">
+        <button class="next-btn" id="next-btn" onclick="nextQuestion()">下一題</button>
+    </div>
+</div>
+
+<script>
+    // ==========================================
+    // 題庫區：內外科護理學 - 消化系統 (20題)
+    // ==========================================
+    const questions = [
+        {
+            question: "有關傾倒症候群 (Dumping syndrome) 之飲食護理指導，下列何者正確？",
+            options: ["採高碳水化合物飲食", "進食時應多喝湯以助消化", "進食後宜採半坐臥姿勢休息", "採高蛋白、高脂肪、低碳水化合物飲食"],
+            answer: 3,
+            explanation: "傾倒症候群應採取「高蛋白、高脂肪、低碳水化合物」飲食，並採少量多餐。進食中不宜喝湯，進食後應平躺休息以延緩胃排空。"
+        },
+        {
+            question: "肝硬化病人出現肝昏迷 (Hepatic Encephalopathy) 徵象時，應限制下列何種營養素的攝取？",
+            options: ["脂肪", "蛋白質", "醣類", "維生素"],
+            answer: 1,
+            explanation: "肝昏迷是因為血氨 (NH3) 數值過高，而蛋白質代謝會產生氨，故需限制蛋白質攝取，並給予 Lactulose 促進排氨。"
+        },
+        {
+            question: "急性胰臟炎 (Acute Pancreatitis) 病人典型的疼痛性質為何？",
+            options: ["右下腹反彈痛", "進食後疼痛緩解", "左上腹持續性劇痛，常放射至背部", "右肋下觸痛 (Murphy's sign)"],
+            answer: 2,
+            explanation: "急性胰臟炎典型症狀為左上腹或上腹部持續劇痛，且常放射至背部，平躺時加劇，屈膝側臥可緩解。"
+        },
+        {
+            question: "關於十二指腸潰瘍 (Duodenal Ulcer) 的疼痛特徵，下列敘述何者正確？",
+            options: ["進食後 30-60 分鐘疼痛", "疼痛常發生在半夜或空腹時（飢餓痛）", "嘔吐後疼痛加劇", "疼痛部位在左上腹"],
+            answer: 1,
+            explanation: "十二指腸潰瘍特色為「飢餓痛」或「夜間痛」（空腹痛），進食後可緩解；胃潰瘍則是「飽食痛」（進食後痛）。"
+        },
+        {
+            question: "協助病人進行結腸造口灌洗 (Colostomy irrigation) 時，灌洗桶懸掛高度應距離造口多少為宜？",
+            options: ["10~20 公分", "30~45 公分", "60~75 公分", "90 公分以上"],
+            answer: 1,
+            explanation: "灌洗桶高度應距造口約 30~45 公分（12-18吋）。太低流速慢，太高壓力過大易導致腹痛或腸穿孔。"
+        },
+        {
+            question: "下列何項檢查數值升高最能作為「急性胰臟炎」的診斷依據？",
+            options: ["血清白蛋白 (Albumin)", "血清澱粉酶 (Amylase) 與解脂酶 (Lipase)", "鹼性磷酸酶 (ALP)", "肌酸酐 (Creatinine)"],
+            answer: 1,
+            explanation: "血清 Amylase 和 Lipase 升高是急性胰臟炎的重要指標。Lipase 特異性較高，持續時間也較長。"
+        },
+        {
+            question: "肝硬化病人合併食道靜脈曲張破裂出血，使用 Sengstaken-Blakemore tube (S-B tube) 止血時，應特別注意預防何種合併症？",
+            options: ["腹瀉", "呼吸道阻塞", "低血糖", "高血鉀"],
+            answer: 1,
+            explanation: "S-B tube 若滑脫可能阻塞呼吸道導致窒息，故床邊需備剪刀，緊急時剪斷管路以利氣球洩氣移除。"
+        },
+        {
+            question: "針對胃食道逆流 (GERD) 病人之衛教，下列何者錯誤？",
+            options: ["避免穿著緊身衣物", "睡前 2-3 小時避免進食", "睡覺時可抬高床頭", "多攝取巧克力與薄荷以舒緩心情"],
+            answer: 3,
+            explanation: "巧克力、薄荷、咖啡因、酒精都會降低下食道括約肌 (LES) 的張力，加重逆流，應避免攝取。"
+        },
+        {
+            question: "下列何者是闌尾炎 (Appendicitis) 病人典型的理學檢查徵象？",
+            options: ["Murphy's sign", "McBurney's point 壓痛與反彈痛", "Cullen's sign", "Homan's sign"],
+            answer: 1,
+            explanation: "McBurney's point (右髂前上棘與肚臍連線外 1/3 處) 壓痛是闌尾炎典型徵象。Murphy's sign 是膽囊炎；Cullen's sign 是胰臟炎出血。"
+        },
+        {
+            question: "接受全胃切除術 (Total Gastrectomy) 的病人，長期容易缺乏下列何種維生素而導致惡性貧血？",
+            options: ["維生素 B1", "維生素 B6", "維生素 B12", "維生素 K"],
+            answer: 2,
+            explanation: "胃壁細胞分泌內在因子 (Intrinsic Factor)，協助維生素 B12 吸收。全胃切除後缺乏內在因子，需終身注射 B12 以防惡性貧血。"
+        },
+        {
+            question: "膽結石阻塞總膽管 (CBD) 導致黃疸時，病人的糞便顏色最可能呈現？",
+            options: ["鮮紅色", "柏油樣黑便", "灰白色 (Clay colored)", "墨綠色"],
+            answer: 2,
+            explanation: "膽道阻塞導致膽紅素無法進入腸道，糞便缺乏糞膽素，因此呈現灰白色 (陶土色)。"
+        },
+        {
+            question: "關於 B 型肝炎 (Hepatitis B) 的血清標記，下列何者表示「具有免疫力且為疫苗接種產生」？",
+            options: ["HBsAg(+)", "Anti-HBs(+), Anti-HBc(-)", "Anti-HBs(+), Anti-HBc(+)", "HBeAg(+)"],
+            answer: 1,
+            explanation: "單純 Anti-HBs(+) 且 Anti-HBc(-) 代表是打疫苗產生的抗體；若 Anti-HBc 也是陽性，代表是自然感染後產生的免疫力。"
+        },
+        {
+            question: "照顧放置 T型管 (T-tube) 的膽道手術病人，下列護理措施何者正確？",
+            options: ["引流袋應高於傷口位置", "飯前夾管以利膽汁引流至體外", "飯後夾管或是抬高引流袋以利消化", "若引流量突然減少無需理會"],
+            answer: 2,
+            explanation: "為了幫助脂肪消化，進食時或飯後應夾管或抬高引流袋，讓膽汁流入十二指腸。平時引流袋應低於傷口。"
+        },
+        {
+            question: "上消化道出血 (Upper GI bleeding) 病人，出現柏油樣黑便 (Tarry stool) 是因為血液中的血紅素經過何種作用？",
+            options: ["腸道細菌分解", "胃酸作用氧化", "膽汁乳化", "胰液消化"],
+            answer: 1,
+            explanation: "上消化道出血時，血液中的血紅素在胃中與胃酸作用變成血黑素 (Hematin)，使糞便呈現黑色柏油狀。"
+        },
+        {
+            question: "大腸癌篩檢最常用且簡便的初步檢查工具為？",
+            options: ["大腸鏡檢查", "癌胚抗原 (CEA)", "糞便潛血檢查 (FOBT)", "腹部超音波"],
+            answer: 2,
+            explanation: "糞便潛血檢查 (FOBT) 是目前最普及的大腸癌初步篩檢工具，若陽性再做大腸鏡確診。"
+        },
+        {
+            question: "腹膜炎 (Peritonitis) 病人最典型的腹部評估發現為？",
+            options: ["腹部柔軟", "板狀腹 (Board-like abdomen) 且有反彈痛", "腸蠕動音亢進", "叩診呈現鼓音"],
+            answer: 1,
+            explanation: "腹膜炎會導致腹部肌肉僵硬如木板 (Board-like rigidity) 以保護發炎部位，並伴隨明顯的反彈痛。"
+        },
+        {
+            question: "下列何種藥物常用於治療消化性潰瘍，其作用機轉為「質子幫浦抑制劑 (PPI)」？",
+            options: ["Cimetidine (Tagamet)", "Omeprazole (Losec)", "Sucralfate (Ulsanic)", "Magnesium Oxide (MgO)"],
+            answer: 1,
+            explanation: "Omeprazole 是 PPI，抑制胃酸分泌效果最強；Cimetidine 是 H2 blocker；Sucralfate 是胃黏膜保護劑。"
+        },
+        {
+            question: "肝硬化病人合併腹水 (Ascites)，護理措施下列何者適當？",
+            options: ["鼓勵大量喝水", "採平躺姿勢", "每日測量腹圍與體重", "給予高鈉飲食"],
+            answer: 2,
+            explanation: "腹水病人需限水限鈉，並每日測量腹圍體重監測變化。採半坐臥姿可減輕呼吸困難，非平躺。"
+        },
+        {
+            question: "潰瘍性結腸炎 (Ulcerative Colitis) 的糞便特徵通常為？",
+            options: ["乾燥堅硬", "帶有黏液及血液的腹瀉", "脂肪便", "灰白色便"],
+            answer: 1,
+            explanation: "潰瘍性結腸炎會導致大腸黏膜充血、水腫、潰瘍，典型症狀為含血及黏液的嚴重腹瀉。"
+        },
+        {
+            question: "執行腹部理學檢查 (Physical Assessment) 的正確順序應為？",
+            options: ["視診→觸診→叩診→聽診", "視診→聽診→叩診→觸診", "觸診→視診→聽診→叩診", "聽診→觸診→視診→叩診"],
+            answer: 1,
+            explanation: "腹部檢查順序為：視、聽、叩、觸。因為觸診和叩診會改變腸蠕動音，所以聽診要在它們之前做。"
+        }
+    ];
+
+    // ==========================================
+    // 程式邏輯區
+    // ==========================================
+    
+    let currentQuestionIndex = 0;
+    let isAnswered = false;
+
+    const questionText = document.getElementById('question-text');
+    const optionsContainer = document.getElementById('options-container');
+    const explanationBox = document.getElementById('explanation');
+    const explanationText = document.getElementById('explanation-text');
+    const nextBtn = document.getElementById('next-btn');
+    const navContainer = document.getElementById('nav-container');
+
+    // 初始化
+    initNav();
+    loadQuestion();
+
+    // 建立導航按鈕
+    function initNav() {
+        navContainer.innerHTML = '';
+        questions.forEach((_, index) => {
+            const btn = document.createElement('button');
+            btn.className = 'nav-btn';
+            btn.innerText = index + 1;
+            btn.onclick = () => jumpToQuestion(index);
+            navContainer.appendChild(btn);
+        });
+        updateNavStyle();
+    }
+
+    // 更新導航按鈕樣式 (目前在哪一題)
+    function updateNavStyle() {
+        const btns = document.querySelectorAll('.nav-btn');
+        btns.forEach((btn, index) => {
+            if (index === currentQuestionIndex) {
+                btn.classList.add('active');
+            } else {
+                btn.classList.remove('active');
+            }
+        });
+    }
+
+    // 跳轉到特定題目
+    function jumpToQuestion(index) {
+        currentQuestionIndex = index;
+        loadQuestion();
+        updateNavStyle();
+    }
+
+    function loadQuestion() {
+        isAnswered = false;
+        const currentData = questions[currentQuestionIndex];
+        
+        // 介面重置
+        questionText.innerText = `${currentQuestionIndex + 1}. ${currentData.question}`;
+        explanationBox.style.display = 'none';
+        nextBtn.style.display = 'none';
+        optionsContainer.innerHTML = '';
+
+        // 生成選項
+        currentData.options.forEach((option, index) => {
+            const btn = document.createElement('button');
+            btn.className = 'option-btn';
+            btn.innerText = option;
+            btn.onclick = () => checkAnswer(index, btn);
+            optionsContainer.appendChild(btn);
+        });
+        
+        updateNavStyle();
+    }
+
+    function checkAnswer(selectedIndex, btnElement) {
+        if (isAnswered) return;
+        isAnswered = true;
+
+        const currentData = questions[currentQuestionIndex];
+        const correctIndex = currentData.answer;
+        const allBtns = optionsContainer.children;
+
+        // 顯示解析
+        explanationText.innerText = currentData.explanation;
+        explanationBox.style.display = 'block';
+        nextBtn.style.display = 'block';
+
+        if (selectedIndex === correctIndex) {
+            btnElement.classList.add('correct');
+        } else {
+            btnElement.classList.add('wrong');
+            allBtns[correctIndex].classList.add('correct');
+        }
+    }
+
+    function nextQuestion() {
+        if (currentQuestionIndex < questions.length - 1) {
+            currentQuestionIndex++;
+            loadQuestion();
+        } else {
+            alert("恭喜！本單元題目已做完！");
+            currentQuestionIndex = 0;
+            loadQuestion();
+        }
+    }
+</script>
+
+</body>
+</html>
