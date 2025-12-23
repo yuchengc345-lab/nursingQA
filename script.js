@@ -603,4 +603,5 @@ function analyzeWeakness() {
     advice += `建議複習該單元的：<br>1. 病理機轉 <br>2. 特殊徵象 (Sign) <br>3. 優先護理措施。`;
     
     analysisText.innerHTML = advice;
+
 }
