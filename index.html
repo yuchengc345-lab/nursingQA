@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>護理愛刷題</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div id="page-home" class="page active">
+        <div class="hero-container">
+            <h1>歡迎來到護理愛刷題</h1>
+            <p>專業護理師國考模擬練習系統</p>
+            <button class="btn-primary" onclick="goToChapters()">開始</button>
+        </div>
+    </div>
+
+    <div id="page-chapters" class="page">
+        <h2>內外科護理學－章節選擇</h2>
+        <div class="chapter-grid">
+            <button class="btn-chapter" onclick="startQuiz('digestive')">消化系統護理</button>
+            <button class="btn-chapter" onclick="startQuiz('pain')">疼痛護理</button>
+            <button class="btn-chapter" onclick="startQuiz('surgery')">手術護理</button>
+            <button class="btn-chapter" onclick="startQuiz('muscle')">肌肉骨骼系統護理</button>
+        </div>
+    </div>
+
+    <div id="page-quiz" class="page">
+        <div class="quiz-header">
+            <div class="score-board">目前得分: <span id="current-score">0</span> 分</div>
+            <button class="btn-small" onclick="toggleNav()">題目導覽 ▼</button>
+        </div>
+        
+        <div id="question-nav" class="question-nav hidden">
+            </div>
+
+        <div class="question-container">
+            <div class="question-info">
+                <span id="q-number">第 1 題</span> / <span id="q-total">共 50 題</span>
+            </div>
+            <h3 id="q-content">題目載入中...</h3>
+            
+            <div class="options-list" id="options-container">
+                </div>
+
+            <div id="explanation-area" class="explanation hidden">
+                <h4>詳細解析</h4>
+                <p id="explanation-text"></p>
+            </div>
+
+            <div class="quiz-footer">
+                <button id="btn-prev" class="btn-secondary" onclick="prevQuestion()">上一題</button>
+                <button id="btn-next" class="btn-secondary" onclick="nextQuestion()">下一題</button>
+                <button id="btn-finish" class="btn-danger hidden" onclick="finishQuiz()">交卷看結果</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="page-result" class="page">
+        <h2>測驗結果</h2>
+        <div class="result-card">
+            <div class="final-score">
+                <span id="final-score-display">0</span> / 100
+            </div>
+            <div class="stats">
+                <p>✅ 正確題數：<span id="correct-count">0</span></p>
+                <p>❌ 錯誤題數：<span id="wrong-count">0</span></p>
+            </div>
+            <div class="analysis-box">
+                <h3>💡 弱點分析與建議</h3>
+                <p id="analysis-text">正在分析您的作答...</p>
+            </div>
+            <button class="btn-primary" onclick="goToChapters()">回到章節選擇</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
