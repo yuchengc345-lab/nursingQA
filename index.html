@@ -3,81 +3,311 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>護理愛刷題</title>
-    <link rel="stylesheet" href="style.css">
+    <title>護理師點滴滴數計算機 | IV Drip Rate Calculator & 國考公式詳解</title>
+    <meta name="description" content="專為護理師與護生設計的點滴計算機。輸入總量與時間，自動換算每分鐘滴數(gtt/min)與秒數。內附護理國考計算公式教學與範例。">
+    <style>
+        /* --- 全局設定 --- */
+        :root {
+            --primary-color: #00b894; /* 醫療綠 */
+            --secondary-color: #0984e3; /* 專業藍 */
+            --bg-color: #f0f7f4;
+            --text-color: #2d3436;
+        }
+
+        body {
+            font-family: 'Segoe UI', 'Microsoft JhengHei', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* --- 計算機區塊 (Card Style) --- */
+        .calculator-card {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            margin-bottom: 40px;
+            border-top: 5px solid var(--primary-color);
+        }
+
+        .calc-title {
+            text-align: center;
+            color: var(--secondary-color);
+            margin-top: 0;
+            font-size: 1.8rem;
+        }
+        
+        .calc-subtitle {
+            text-align: center;
+            color: #636e72;
+            font-size: 0.9rem;
+            margin-bottom: 25px;
+        }
+
+        .input-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        @media (max-width: 600px) {
+            .input-grid { grid-template-columns: 1fr; }
+        }
+
+        .form-group { margin-bottom: 15px; }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #2d3436;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #dfe6e9;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+            box-sizing: border-box;
+        }
+
+        input:focus, select:focus {
+            border-color: var(--primary-color);
+            outline: none;
+        }
+
+        .btn-calc {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s;
+            margin-top: 10px;
+        }
+
+        .btn-calc:hover { transform: scale(1.02); }
+
+        /* --- 結果顯示區 --- */
+        #result-area {
+            display: none; /* 預設隱藏 */
+            margin-top: 25px;
+            background-color: #e3fdf5;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .result-main {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+
+        .result-desc { color: #636e72; font-size: 0.9rem; }
+        .result-secondary { font-size: 1.2rem; color: var(--secondary-color); margin-top: 10px; font-weight: bold;}
+
+        /* --- SEO 文章區塊 --- */
+        .article-section {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+        .article-section h2 { border-left: 5px solid var(--secondary-color); padding-left: 15px; color: #2d3436; }
+        .article-section h3 { color: var(--secondary-color); margin-top: 30px; }
+        .highlight-box {
+            background-color: #fff3cd;
+            border: 1px solid #ffeeba;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .formula {
+            background-color: #2d3436;
+            color: #fff;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            font-family: 'Courier New', monospace;
+            font-size: 1.1rem;
+            overflow-x: auto;
+        }
+        
+        /* --- 廣告位預留 --- */
+        .ad-space {
+            width: 100%;
+            height: 100px;
+            background-color: #eee;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #aaa;
+            margin: 20px 0;
+            border-radius: 8px;
+            border: 2px dashed #ddd;
+        }
+
+    </style>
 </head>
 <body>
 
-    <div id="page-home" class="page active">
-        <div class="hero-container">
-            <h1>歡迎來到護理愛刷題</h1>
-            <p>陳禹丞用AI做的專業護理師國考模擬練習系統</p>
-            <button class="btn-primary" onclick="goToChapters()">開始</button>
-        </div>
-    </div>
+<div class="container">
+    
+    <div class="ad-space">Google 廣告顯示區 (行動版置頂)</div>
 
-<div id="page-chapters" class="page">
-        <button class="btn-back" onclick="goToHome()">⬅ 回首頁</button>
+    <div class="calculator-card">
+        <h1 class="calc-title">💉 點滴滴數計算機</h1>
+        <p class="calc-subtitle">護理實習、國考計算必備工具</p>
         
-        <h2>內外科護理學－章節選擇</h2>
-        <div class="chapter-grid">
-            <button class="btn-chapter" onclick="startQuiz('digestive')">消化系統護理</button>
-            <button class="btn-chapter" onclick="startQuiz('pain')">疼痛護理</button>
-            <button class="btn-chapter" onclick="startQuiz('surgery')">手術護理</button>
-            <button class="btn-chapter" onclick="startQuiz('muscle')">肌肉骨骼系統護理</button>
+        <div class="input-grid">
+            <div class="form-group">
+                <label>輸液總量 (Total Volume)</label>
+                <input type="number" id="volume" placeholder="例如：500">
+                <small style="color:#888">單位：ml</small>
+            </div>
+            
+            <div class="form-group">
+                <label>滴係數 (Drop Factor)</label>
+                <select id="dropFactor">
+                    <option value="15">15 gtt/ml (一般成人常用)</option>
+                    <option value="20">20 gtt/ml (精密輸液套)</option>
+                    <option value="60">60 gtt/ml (小兒/微量)</option>
+                    <option value="10">10 gtt/ml (輸血)</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>預計輸注時間 (Time)</label>
+            <div style="display: flex; gap: 10px;">
+                <input type="number" id="hours" placeholder="0" min="0">
+                <span style="padding-top:10px">小時</span>
+                <input type="number" id="minutes" placeholder="0" min="0">
+                <span style="padding-top:10px">分鐘</span>
+            </div>
+        </div>
+
+        <button class="btn-calc" onclick="calculateIV()">開始計算</button>
+
+        <div id="result-area">
+            <div class="result-desc">每分鐘滴數 (gtt/min)</div>
+            <div class="result-main" id="gttResult">--</div>
+            <div class="result-secondary">
+                約每 <span id="secResult" style="color:#d63031">--</span> 秒滴 1 滴
+            </div>
         </div>
     </div>
 
-<div id="page-quiz" class="page">
-        <div class="quiz-header">
-            <button class="btn-text" onclick="goToChapters()">⬅ 退出</button>
-            
-            <div class="score-board">得分: <span id="current-score">0</span></div>
-            <button class="btn-small" onclick="toggleNav()">題目導覽 ▼</button>
-        </div>
+    <div class="ad-space">Google 廣告顯示區 (轉換率最高位置)</div>
+
+    <article class="article-section">
+        <h2>護理師國考必備：點滴滴數計算公式解析</h2>
+        <p>在臨床護理工作中，正確計算靜脈輸液（IV Drip）的流速是確保病人安全的基本功。無論是在內外科實習，還是面對護理師執照國考，<strong>點滴滴數計算</strong>都是必考題型。本頁面提供簡單好用的線上計算機，並為您整理詳細的公式記憶法。</p>
         
-        <div id="question-nav" class="question-nav hidden"></div>
+        
 
-        <div class="question-container">
-            <div class="question-info">
-                <span id="q-number">第 1 題</span> / <span id="q-total">共 50 題</span>
-            </div>
-            <h3 id="q-content">題目載入中...</h3>
-            
-            <div class="options-list" id="options-container"></div>
+        <h3>什麼是滴係數 (Drop Factor)？</h3>
+        <p>滴係數指的是「1 ml 的液體等於幾滴」。這取決於你手上拿的輸液套（IV Set）種類，包裝袋上都會標示：</p>
+        <ul>
+            <li><strong>一般輸液套 (Macrodrip)：</strong> 常見規格為 15 gtt/ml 或 20 gtt/ml。</li>
+            <li><strong>精密/小兒輸液套 (Microdrip)：</strong> 通常為 60 gtt/ml（即 60 滴等於 1 ml）。</li>
+            <li><strong>輸血套：</strong> 管徑較大，通常為 10 gtt/ml。</li>
+        </ul>
 
-            <div id="explanation-area" class="explanation hidden">
-                <h4>詳細解析</h4>
-                <p id="explanation-text"></p>
-            </div>
-
-            <div class="quiz-footer">
-                <button id="btn-prev" class="btn-secondary" onclick="prevQuestion()">上一題</button>
-                <button id="btn-next" class="btn-secondary" onclick="nextQuestion()">下一題</button>
-                <button id="btn-finish" class="btn-danger hidden" onclick="finishQuiz()">交卷看結果</button>
-            </div>
+        <h3>計算公式 (Formula)</h3>
+        <p>國考解題時，請務必記住這個核心公式：</p>
+        
+        <div class="formula">
+            每分鐘滴數(gtt/min) = <br>
+            (輸液總量 ml × 滴係數 gtt/ml) ÷ 總分鐘數 min
         </div>
-    </div>
 
-    <div id="page-result" class="page">
-        <h2>測驗結果</h2>
-        <div class="result-card">
-            <div class="final-score">
-                <span id="final-score-display">0</span> / 100
-            </div>
-            <div class="stats">
-                <p>✅ 正確題數：<span id="correct-count">0</span></p>
-                <p>❌ 錯誤題數：<span id="wrong-count">0</span></p>
-            </div>
-            <div class="analysis-box">
-                <h3>💡 弱點分析與建議</h3>
-                <p id="analysis-text">正在分析您的作答...</p>
-            </div>
-            <button class="btn-primary" onclick="goToChapters()">回到章節選擇</button>
+        <div class="highlight-box">
+            <strong>⚠️ 易錯提醒：</strong> 題目給的時間如果是「小時」，一定要先乘以 60 換算成「分鐘」喔！
         </div>
-    </div>
 
-    <script src="script.js"></script>
+        <h3>國考題實戰演練</h3>
+        <p><strong>題目：</strong>醫師醫囑給予 N/S 500ml，預計 8 小時滴完，使用滴係數 15 gtt/ml 的輸液套，請問流速應調整為每分鐘幾滴？</p>
+        <p><strong>解析：</strong></p>
+        <ol>
+            <li>將時間換算分鐘：8小時 × 60 = 480 分鐘。</li>
+            <li>套用公式：(500 × 15) ÷ 480。</li>
+            <li>計算：7500 ÷ 480 = 15.625。</li>
+            <li>答案：四捨五入後約為 <strong>16 gtt/min</strong>。</li>
+        </ol>
+
+        <h3>臨床小撇步：如何調整滾輪？</h3>
+        <p>算出「每分鐘 16 滴」後，拿著手錶數一分鐘太累了。我們通常會換算成「幾秒滴一滴」：</p>
+        <p><code>60秒 ÷ 16滴 ≈ 3.75 秒</code></p>
+        <p>所以在病房時，只要看著點滴室，心裡默數「1、2、3、4（滴下來）」，節奏就差不多準確了！</p>
+    </article>
+
+    <footer style="text-align: center; margin-top: 40px; color: #888; font-size: 0.8rem;">
+        <p>© 2024 NursingTools. 護理師的臨床小幫手.</p>
+    </footer>
+</div>
+
+<script>
+    function calculateIV() {
+        // 1. 獲取數值
+        const vol = parseFloat(document.getElementById('volume').value);
+        const hrs = parseFloat(document.getElementById('hours').value) || 0;
+        const mins = parseFloat(document.getElementById('minutes').value) || 0;
+        const factor = parseInt(document.getElementById('dropFactor').value);
+
+        // 2. 驗證
+        if (!vol || vol <= 0) {
+            alert("請輸入正確的輸液總量！");
+            return;
+        }
+        if (hrs === 0 && mins === 0) {
+            alert("請輸入預計輸注時間！");
+            return;
+        }
+
+        // 3. 計算
+        const totalMinutes = (hrs * 60) + mins;
+        const gttPerMin = (vol * factor) / totalMinutes;
+        
+        // 4. 顯示結果
+        const resultArea = document.getElementById('result-area');
+        const gttDisplay = document.getElementById('gttResult');
+        const secDisplay = document.getElementById('secResult');
+
+        resultArea.style.display = 'block';
+        gttDisplay.innerText = Math.round(gttPerMin); // 四捨五入取整
+
+        // 計算秒數 (60 / gtt)
+        const secondsPerDrop = 60 / gttPerMin;
+        
+        if (gttPerMin > 100) {
+            secDisplay.innerText = "極快 (連續流動)";
+        } else if (gttPerMin < 1) {
+             secDisplay.innerText = "極慢";
+        } else {
+            secDisplay.innerText = secondsPerDrop.toFixed(1);
+        }
+    }
+</script>
+
 </body>
-
 </html>
